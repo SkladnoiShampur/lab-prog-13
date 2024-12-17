@@ -1,0 +1,75 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <string>
+
+struct Date {
+    int day;
+    int month;
+    int year;
+
+    bool operator<(const Date &other) const {
+        if (year != other.year) return year < other.year;
+        if (month != other.month) return month < other.month;
+        return day < other.day;
+    }
+};
+
+struct Express {
+    Date startDate;         // Дата начала действия билета
+    Date expirationDate;    // Дата срока действия билета
+    std::string routeNumber; // Номер маршрута
+    Date travelDate;        // Дата проезда
+    std::string boardingTime; // Время посадки
+};
+
+void sortByStartDate(std::vector<Express> &expressList) {
+    std::sort(expressList.begin(), expressList.end(), [](const Express &a, const Express &b) {
+        return a.startDate < b.startDate;
+    });
+}
+
+void printExpressList(const std::vector<Express> &expressList) {
+    for (const auto &express : expressList) {
+        std::cout << "Маршрут: " << express.routeNumber 
+                  << ", Дата начала: " << express.startDate.day << "." << express.startDate.month << "." << express.startDate.year
+                  << ", Дата окончания: " << express.expirationDate.day << "." << express.expirationDate.month << "." << express.expirationDate.year
+                  << ", Дата проезда: " << express.travelDate.day << "." << express.travelDate.month << "." << express.travelDate.year
+                  << ", Время посадки: " << express.boardingTime << std::endl;
+    }
+}
+
+int main() {
+    std::vector<Express> expressList;
+
+    int numberOfTickets;
+    std::cout << "Введите количество билетов: \n";
+    std::cin >> numberOfTickets;
+
+    for (int i = 0; i < numberOfTickets; ++i) {
+        Express express;
+        std::cout << "Введите номер маршрута: \n";
+        std::cin >> express.routeNumber;
+
+        std::cout << "Введите дату начала (дд мм гггг): \n";
+        std::cin >> express.startDate.day >> express.startDate.month >> express.startDate.year;
+
+        std::cout << "Введите дату окончания (дд мм гггг): \n";
+        std::cin >> express.expirationDate.day >> express.expirationDate.month >> express.expirationDate.year;
+
+        std::cout << "Введите дату проезда (дд мм гггг): \n";
+        std::cin >> express.travelDate.day >> express.travelDate.month >> express.travelDate.year;
+
+        std::cout << "Введите время посадки (чч:мм): \n";
+        std::cin >> express.boardingTime;
+
+        expressList.push_back(express);
+    }
+
+    sortByStartDate(expressList);
+
+    std::cout << "\nОтсортированный список билетов:\n";
+    printExpressList(expressList);
+
+    return 0;
+}
