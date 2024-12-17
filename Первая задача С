@@ -1,0 +1,59 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_WORKERS 100
+#define MAX_NAME_LENGTH 50
+
+typedef struct {
+    char lastName[MAX_NAME_LENGTH];
+    char initials[3]; // Инициалы 
+    char position[MAX_NAME_LENGTH];
+    int yearOfEmployment;
+} Worker;
+
+int compareWorkers(const void *a, const void *b) {
+    Worker *workerA = (Worker *)a;
+    Worker *workerB = (Worker *)b;
+    return strcmp(workerA->lastName, workerB->lastName);
+}
+
+void sortWorkers(Worker workers[], int count) {
+    qsort(workers, count, sizeof(Worker), compareWorkers);
+}
+
+void printWorkers(Worker workers[], int count) {
+    for (int i = 0; i < count; i++) {
+        printf("Фамилия: %s, Инициалы: %s, Должность: %s, Год поступления: %d\n",
+               workers[i].lastName,
+               workers[i].initials,
+               workers[i].position,
+               workers[i].yearOfEmployment);
+    }
+}
+
+int main() {
+    Worker workers[MAX_WORKERS];
+    int count;
+
+    printf("Введите количество работников: \n");
+    scanf("%d", &count);
+
+    for (int i = 0; i < count; i++) {
+        printf("Введите фамилию работника %d: \n", i + 1);
+        scanf("%s", workers[i].lastName);
+        printf("Введите инициалы работника %d: \n", i + 1);
+        scanf("%s", workers[i].initials);
+        printf("Введите должность работника %d: \n", i + 1);
+        scanf("%s", workers[i].position);
+        printf("Введите год поступления на работу работника %d: \n", i + 1);
+        scanf("%d", &workers[i].yearOfEmployment);
+    }
+
+    sortWorkers(workers, count);
+
+    printf("\nОтсортированный список работников:\n");
+    printWorkers(workers, count);
+
+    return 0;
+}
